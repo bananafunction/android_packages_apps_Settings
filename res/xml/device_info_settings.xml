@@ -137,6 +137,13 @@
                         android:data="https://source.android.com/security/bulletin/" />
         </PreferenceScreen>
 
+        <!-- Vendor patch level -->
+        <Preference android:key="lineage_vendor_security_patch"
+                android:enabled="false"
+                android:shouldDisableView="false"
+                android:title="@string/lineage_vendor_security_patch"
+                android:summary="@string/lineage_vendor_security_patch_default" />
+
         <!-- Device FCC equipment id -->
         <com.android.settings.DividerPreference
                 android:key="fcc_equipment_id"

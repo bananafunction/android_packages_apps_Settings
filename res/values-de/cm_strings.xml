@@ -39,6 +39,8 @@
     <string name="device_name">Gerätename</string>
     <string name="mod_api_level">LineageOS API-Level</string>
     <string name="mod_api_level_default">Unbekannt</string>
+    <string name="lineage_vendor_security_patch">Stand der Herstellerbibliotheken</string>
+    <string name="lineage_vendor_security_patch_default">Unbekannt</string>
     <string name="build_date">Build-Datum</string>
     <string name="cmupdate_settings_title">LineageOS-Updates</string>
     <string name="app_ops_categories_location">Standort</string>

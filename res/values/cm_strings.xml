@@ -55,6 +55,10 @@
     <string name="mod_api_level">LineageOS API level</string>
     <string name="mod_api_level_default">Unknown</string>
 
+    <!-- About phone screen, Vendor Patch Level -->
+    <string name="lineage_vendor_security_patch">Vendor patch level</string>
+    <string name="lineage_vendor_security_patch_default">Unknown</string>
+
     <!-- About phone screen, build date -->
     <string name="build_date">Build date</string>
     <string name="build_date_default" translatable="false">2017-01-01-0000</string>

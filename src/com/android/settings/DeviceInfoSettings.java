@@ -32,7 +32,9 @@ import android.provider.Settings;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceGroup;
 import android.telephony.CarrierConfigManager;
+import android.text.format.DateFormat;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -49,6 +51,10 @@ import com.android.internal.os.IRegionalizationService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
@@ -83,6 +89,7 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
     private static final String KEY_MOD_VERSION = "mod_version";
     private static final String KEY_MOD_BUILD_DATE = "build_date";
     private static final String KEY_MOD_API_LEVEL = "mod_api_level";
+    private static final String KEY_VENDOR_PATCH_LEVEL = "lineage_vendor_security_patch";
 
     static final int TAPS_TO_BE_A_DEVELOPER = 7;
 
@@ -152,6 +159,8 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
         setValueSummary(KEY_MOD_BUILD_DATE, "ro.build.date");
         setExplicitValueSummary(KEY_MOD_API_LEVEL, constructApiLevelString());
         findPreference(KEY_MOD_API_LEVEL).setEnabled(true);
+        setStringSummary(KEY_VENDOR_PATCH_LEVEL, getVendorSecurityPatchLevel());
+        findPreference(KEY_VENDOR_PATCH_LEVEL).setEnabled(true);
 
         if (!SELinux.isSELinuxEnabled()) {
             String status = getResources().getString(R.string.selinux_status_disabled);
@@ -482,6 +491,30 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
         builder.append(cyanogenmod.os.Build.getNameForSDKInt(sdkInt))
                 .append(" (" + sdkInt + ")");
         return builder.toString();
+    }
+
+    private static final String KEY_AOSP_VENDOR_SECURITY_PATCH =
+            "ro.vendor.build.security_patch";
+
+    private static final String KEY_LINEAGE_VENDOR_SECURITY_PATCH =
+            "ro.lineage.build.vendor_patch";
+
+    private String getVendorSecurityPatchLevel() {
+        String patchLevel = SystemProperties.get(KEY_LINEAGE_VENDOR_SECURITY_PATCH);
+        if (patchLevel.isEmpty()) {
+            patchLevel = SystemProperties.get(KEY_AOSP_VENDOR_SECURITY_PATCH);
+        }
+        if (!patchLevel.isEmpty()) {
+            try {
+                SimpleDateFormat template = new SimpleDateFormat("yyyy-MM-dd");
+                Date patchLevelDate = template.parse(patchLevel);
+                String format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "dMMMMyyyy");
+                patchLevel = DateFormat.format(format, patchLevelDate).toString();
+            } catch (ParseException e) {
+                // parsing failed, use raw string
+            }
+        }
+        return patchLevel;
     }
 
     private static class SummaryProvider implements SummaryLoader.SummaryProvider {
